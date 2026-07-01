@@ -1,0 +1,67 @@
+from vits_common import (
+    build_audio_config,
+    build_dataset_config,
+    build_vits_config,
+    parse_resume_args,
+    run_training,
+)
+
+args = parse_resume_args()
+
+LANG_TAG = "en"
+DATASET_NAME = "en_ljspeech"
+META_FILE = "metadata_clean.csv"
+DATASET_PATH = f"/home/md_dz6/AI/coqui_data/{DATASET_NAME}"
+RUN_NAME = "en_ljspeech_vits_real"
+OUTPUT_PATH = f"/home/md_dz6/AI/coqui_runs/{LANG_TAG}/{RUN_NAME}"
+TEXT_CLEANER = "english_cleaners"
+PHONEMIZER = "espeak"
+PHONEME_LANGUAGE = "en-us"
+SAMPLE_RATE = 22050
+
+TEST_SENTENCES = [
+    ["It took me quite a long time to develop a voice, and now that I have it, I'm not going to be silent."],
+    ["Although the weather changed suddenly, she continued speaking calmly and clearly."],
+    ["Can you hear the difference between a question, a statement, and an exclamation?"],
+    ["Dr. Smith bought three books for twelve dollars and fifty cents on January fifth."],
+    ["The quick brown fox jumps over the lazy dog."],
+]
+
+dataset_config = build_dataset_config(
+    dataset_name=DATASET_NAME,
+    dataset_path=DATASET_PATH,
+    meta_file=META_FILE,
+    language=LANG_TAG,
+)
+
+audio_config = build_audio_config(sample_rate=SAMPLE_RATE)
+
+config = build_vits_config(
+    run_name=RUN_NAME,
+    output_path=OUTPUT_PATH,
+    dataset_config=dataset_config,
+    audio_config=audio_config,
+    text_cleaner=TEXT_CLEANER,
+    phonemizer=PHONEMIZER,
+    phoneme_language=PHONEME_LANGUAGE,
+    test_sentences=TEST_SENTENCES,
+    characters=None,
+    continue_path=args.continue_path,
+    restore_path=args.restore_path,
+    restore_config=args.restore_config,
+    epochs=args.epochs,
+    batch_size=args.batch_size,
+    eval_batch_size=args.eval_batch_size,
+    num_workers=args.num_workers,
+    num_eval_workers=args.num_eval_workers,
+    lr_gen=args.lr_gen,
+    lr_disc=args.lr_disc,
+)
+
+run_training(
+    config=config,
+    dataset_config=dataset_config,
+    output_path=OUTPUT_PATH,
+    continue_path=args.continue_path,
+    restore_path=args.restore_path,
+)

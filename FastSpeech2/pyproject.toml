@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastspeech2-local"
+version = "0.1.0"
+description = "Local EN/VI FastSpeech2 CLI pipeline"
+requires-python = ">=3.9"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+fs2-local = "fastspeech2.cli.local_cli:main"

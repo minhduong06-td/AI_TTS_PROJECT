@@ -1,0 +1,57 @@
+
+# secrets
+
+.env
+
+
+
+# data / checkpoints / runs chưa up
+
+data/
+
+coqui_runs/
+
+FastSpeech2_runs/
+
+web/output/
+
+FastSpeech2/workspace/
+
+
+
+# cache
+
+__pycache__/
+
+*.pyc
+
+.ipynb_checkpoints/
+
+
+
+# model / audio / archive nặng
+
+*.pth
+
+*.pth.tar
+
+*.ckpt
+
+*.pt
+
+*.npy
+
+*.npz
+
+*.wav
+
+*.mp3
+
+*.zip
+
+*.tar
+
+*.tar.gz
+
+*.log
+
