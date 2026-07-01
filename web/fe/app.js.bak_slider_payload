@@ -1,0 +1,177 @@
+const modelEl = document.getElementById("model");
+const langEl = document.getElementById("lang");
+const textEl = document.getElementById("text");
+const btn = document.getElementById("btn");
+
+const loading = document.getElementById("loading");
+const statusEl = document.getElementById("status");
+const percentEl = document.getElementById("percent");
+const fillEl = document.getElementById("fill");
+
+const result = document.getElementById("result");
+const audio = document.getElementById("audio");
+const download = document.getElementById("download");
+const pathEl = document.getElementById("path");
+
+const errorEl = document.getElementById("error");
+const logsEl = document.getElementById("logs");
+
+const fastspeech2Controls = document.getElementById("fastspeech2Controls");
+const vitsControls = document.getElementById("vitsControls");
+
+const durationControl = document.getElementById("durationControl");
+const pitchControl = document.getElementById("pitchControl");
+const energyControl = document.getElementById("energyControl");
+
+const lengthScale = document.getElementById("lengthScale");
+const noiseScale = document.getElementById("noiseScale");
+const noiseScaleDp = document.getElementById("noiseScaleDp");
+
+let timer = null;
+
+function show(el, yes) {
+  el.classList.toggle("hidden", !yes);
+}
+
+function bindSlider(inputId, valueId) {
+  const input = document.getElementById(inputId);
+  const value = document.getElementById(valueId);
+
+  if (!input || !value) return;
+
+  value.textContent = input.value;
+
+  input.addEventListener("input", () => {
+    value.textContent = input.value;
+  });
+}
+
+bindSlider("durationControl", "durationValue");
+bindSlider("pitchControl", "pitchValue");
+bindSlider("energyControl", "energyValue");
+
+bindSlider("lengthScale", "lengthValue");
+bindSlider("noiseScale", "noiseValue");
+bindSlider("noiseScaleDp", "noiseDpValue");
+
+function updateControlPanel() {
+  const model = document.getElementById("model").value;
+
+  if (model === "fastspeech2") {
+    fastspeech2Controls.classList.remove("hidden");
+    vitsControls.classList.add("hidden");
+  } else {
+    fastspeech2Controls.classList.add("hidden");
+    vitsControls.classList.remove("hidden");
+  }
+}
+
+document.getElementById("model").addEventListener("change", updateControlPanel);
+updateControlPanel();
+
+function setProgress(value) {
+  const p = Math.max(0, Math.min(100, Number(value) || 0));
+  percentEl.textContent = `${p}%`;
+  fillEl.style.width = `${p}%`;
+}
+
+function resetUi() {
+  show(errorEl, false);
+  show(result, false);
+  show(loading, true);
+  btn.disabled = true;
+  setProgress(0);
+  statusEl.textContent = "Đang gửi yêu cầu...";
+  logsEl.textContent = "";
+}
+
+function finishUi() {
+  btn.disabled = false;
+  show(loading, false);
+}
+
+async function poll(jobId) {
+  const res = await fetch(`/api/jobs/${jobId}`);
+  if (!res.ok) {
+    throw new Error("Không lấy được trạng thái job.");
+  }
+
+  const job = await res.json();
+
+  setProgress(job.progress || 0);
+  logsEl.textContent = (job.logs || []).join("\n");
+
+  if (job.status === "queued") {
+    statusEl.textContent = "Đang xếp hàng...";
+  } else if (job.status === "running") {
+    statusEl.textContent = "Đang generate audio...";
+  } else {
+    statusEl.textContent = job.status;
+  }
+
+  if (job.status === "done") {
+    clearInterval(timer);
+    timer = null;
+    finishUi();
+
+    audio.src = job.audio_url;
+    download.href = job.audio_url;
+    download.download = job.audio_url.split("/").pop();
+    pathEl.textContent = job.file_path || "";
+
+    show(result, true);
+  }
+
+  if (job.status === "error") {
+    clearInterval(timer);
+    timer = null;
+    finishUi();
+
+    errorEl.textContent = job.error || "Có lỗi khi generate.";
+    show(errorEl, true);
+  }
+}
+
+btn.addEventListener("click", async () => {
+  resetUi();
+
+  try {
+    const payload = {
+      model: modelEl.value,
+      lang: langEl.value,
+      text: textEl.value,
+    };
+
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.detail || "Request lỗi.");
+    }
+
+    const data = await res.json();
+
+    await poll(data.job_id);
+
+    timer = setInterval(() => {
+      poll(data.job_id).catch((err) => {
+        clearInterval(timer);
+        timer = null;
+        finishUi();
+        errorEl.textContent = err.message;
+        show(errorEl, true);
+      });
+    }, 1000);
+
+  } catch (err) {
+    finishUi();
+    errorEl.textContent = err.message;
+    show(errorEl, true);
+  }
+});

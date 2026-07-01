@@ -1,0 +1,248 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f4f7;
+  color: #101828;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.card {
+  width: min(900px, 100%);
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 18px 50px rgba(16, 24, 40, 0.14);
+}
+
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 26px;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.pill {
+  display: none;
+}
+
+.top p {
+  display: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+select,
+textarea {
+  width: 100%;
+  border: 1px solid #d0d5dd;
+  border-radius: 14px;
+  padding: 13px 14px;
+  font-size: 16px;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+select:focus,
+textarea:focus {
+  border-color: #2e90fa;
+  box-shadow: 0 0 0 4px rgba(46, 144, 250, 0.14);
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 15px;
+  background: #1570ef;
+  color: white;
+  font-weight: 800;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.box {
+  margin-top: 22px;
+  padding: 18px;
+  background: #f8fafc;
+  border: 1px solid #e4e7ec;
+  border-radius: 16px;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.bar {
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e4e7ec;
+}
+
+#fill {
+  width: 0%;
+  height: 100%;
+  background: #1570ef;
+  transition: width 0.25s ease;
+}
+
+.result {
+  margin-top: 22px;
+  padding: 18px;
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+  border-radius: 16px;
+}
+
+.result h2 {
+  margin: 0 0 12px;
+}
+
+audio {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+#download {
+  color: #067647;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+#path {
+  margin-top: 10px;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.error {
+  margin-top: 22px;
+  padding: 16px;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  color: #b42318;
+  border-radius: 16px;
+  white-space: pre-wrap;
+}
+
+.logbox {
+  margin-top: 18px;
+}
+
+.logbox pre {
+  max-height: 280px;
+  overflow: auto;
+  background: #101828;
+  color: #f2f4f7;
+  padding: 14px;
+  border-radius: 14px;
+  font-size: 13px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .page {
+    padding: 14px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Ẩn đường dẫn file output dưới nút download */
+#path {
+  display: none;
+}
+
+/* Biến Download file wav thành nút */
+#download {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #1570ef;
+  color: white;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+#download:hover {
+  opacity: 0.9;
+}
+
+.controls {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f7f8fb;
+  border: 1px solid #e5e7eb;
+}
+
+.controls h3 {
+  margin: 0 0 14px 0;
+  font-size: 18px;
+}
+
+.controls label {
+  display: block;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+.controls input[type="range"] {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.hidden {
+  display: none !important;
+}

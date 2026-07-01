@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local TTS Demo</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <div class="top">
+        <h1>TTS DEMO</h1>
+      </div>
+
+      <div class="row">
+        <label>
+          Mô hình
+          <select id="model">
+            <option value="fastspeech2">FastSpeech2</option>
+            <option value="vits">Coqui VITS</option>
+          </select>
+        </label>
+
+        <label>
+          Ngôn ngữ
+          <select id="lang">
+            <option value="vi">Tiếng Việt</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        Text
+        <textarea id="text" rows="6" placeholder="Nhập câu cần chuyển thành giọng nói...">xin chào, đây là thử nghiệm chuyển văn bản thành giọng nói.</textarea>
+      </label>
+
+      <div class="controls" id="fastspeech2Controls">
+        <h3>FastSpeech2 controls</h3>
+
+        <label>
+          Duration control: <span id="durationValue">1.00</span>
+          <input id="durationControl" type="range" min="0.70" max="1.80" step="0.05" value="1.00">
+        </label>
+
+        <label>
+          Pitch control: <span id="pitchValue">1.00</span>
+          <input id="pitchControl" type="range" min="0.70" max="1.50" step="0.05" value="1.00">
+        </label>
+
+        <label>
+          Energy control: <span id="energyValue">1.00</span>
+          <input id="energyControl" type="range" min="0.70" max="1.50" step="0.05" value="1.00">
+        </label>
+      </div>
+
+      <div class="controls hidden" id="vitsControls">
+        <h3>VITS controls</h3>
+
+        <label>
+          Length scale: <span id="lengthValue">1.00</span>
+          <input id="lengthScale" type="range" min="0.70" max="1.80" step="0.05" value="1.00">
+        </label>
+
+        <label>
+          Noise scale: <span id="noiseValue">0.667</span>
+          <input id="noiseScale" type="range" min="0.10" max="1.20" step="0.01" value="0.667">
+        </label>
+
+        <label>
+          Noise scale DP: <span id="noiseDpValue">0.80</span>
+          <input id="noiseScaleDp" type="range" min="0.10" max="1.20" step="0.05" value="0.80">
+        </label>
+      </div>
+
+      <button id="btn">Generate</button>
+
+      <div id="loading" class="box hidden">
+        <div class="line">
+          <span id="status">Đang xử lý...</span>
+          <strong id="percent">0%</strong>
+        </div>
+        <div class="bar">
+          <div id="fill"></div>
+        </div>
+      </div>
+
+      <div id="result" class="result hidden">
+        <h2>Audio output</h2>
+        <audio id="audio" controls></audio>
+        <a id="download" href="#" download>Download file wav</a>
+        <p id="path"></p>
+      </div>
+
+      <div id="error" class="error hidden"></div>
+
+      <details class="logbox">
+        <summary>Log backend</summary>
+        <pre id="logs"></pre>
+      </details>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
