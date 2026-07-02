@@ -580,9 +580,4 @@ python local_cli.py synthesize \
 
 ---
 
-## 13. Notes
 
-- VITS training should be evaluated with both loss curves and generated audio.
-- FastSpeech2 loss curves are easier to interpret because every target is explicit.
-- Vietnamese TTS must be checked by listening, especially for tone marks, final consonants and sentence rhythm.
-- A low training loss does not always guarantee good inference quality.
